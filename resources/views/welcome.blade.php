@@ -103,7 +103,7 @@
             <div id="input_zone">
                 <input id="message" class="vertical-align custom-input" type="text" />
                 <label class="custom-file-upload">
-                    <input id="message_img" type="file" class="vertical-align input-file-hidden" />
+                    <input id="message_img" type="file" accept=".jpg,.jpeg,.png" class="vertical-align input-file-hidden" />
                     <i class="fa fa-cloud-upload"></i>
                 </label>
                 <button id="send_message" class="vertical-align btn" type="button">Send</button>
