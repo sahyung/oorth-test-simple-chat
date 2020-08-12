@@ -12,3 +12,4 @@ $ npm run server
 # open another console to run frontend
 $ php artisan serve
 ```
+join chat room  by http://127.0.0.1:8000

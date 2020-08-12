@@ -29,13 +29,13 @@ $(function () {
         message.val('');
         //append the new message on the chatroom
         chatroom.append(`
-                        <div>
-                            <div class="box3 sb14">
-                              <p style='color:${data.color}' class="chat-text user-nickname">${data.username}</p>
-                              <p class="chat-text" style="color: rgba(0,0,0,0.87)">${data.message}</p>
-                            </div>
-                        </div>
-                        `)
+            <div>
+                <div class="box3 sb14">
+                    <p style='color:${data.color}' class="chat-text user-nickname">${data.username}</p>
+                    <p class="chat-text" style="color: rgba(0,0,0,0.87)">${data.message}</p>
+                </div>
+            </div>
+        `)
         keepTheChatRoomToTheBottom()
     });
 
@@ -58,20 +58,19 @@ $(function () {
     message.on("keypress", e => {
         let keycode = (e.keyCode ? e.keyCode : e.which);
         if(keycode != '13'){
-            keepTheChatRoomToTheBottom()
             socket.emit('typing')
         }
     });
 
     //Listen on typing
     socket.on('typing', (data) => {
-        keepTheChatRoomToTheBottom()
         feedback.html("<p><i>" + data.username + " is typing a message..." + "</i></p>")
+        keepTheChatRoomToTheBottom()
     });
 });
 
 // function thats keeps the chatbox stick to the bottom
 const keepTheChatRoomToTheBottom = () => {
-    const chatroom = document.getElementById('chatroom-history');
+    const chatroom = document.getElementById('chatroom');
     chatroom.scrollTop = chatroom.scrollHeight - chatroom.clientHeight;
 }
