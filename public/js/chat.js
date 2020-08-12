@@ -50,9 +50,6 @@ $(function () {
         message_img = null;
         feedback.html('');
         message.val('');
-        let box = document.querySelector('#chatroom');
-        let style = getComputedStyle(box);
-        let max_width = style.width;
 
         //append the new message on the chatroom
         if (data.message_img) {
@@ -61,7 +58,7 @@ $(function () {
                 <div class="box3 sb14">
                     <p style='color:${data.color}' class="chat-text user-nickname">${data.username}</p>
                     <p class="chat-text" style="color: rgba(0,0,0,0.87)">${data.message}</p>
-                    <img max-width="${max_width}" src="${data.message_img}" / >
+                    <img width="100%" src="${data.message_img}" / >
                 </div>
             </div>
         `)
