@@ -66,6 +66,7 @@
             margin-bottom: 30px;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
 </head>
 
@@ -83,20 +84,6 @@
 
     <!--Big wrapper-->
     <div class="big-wrapper">
-        <!-- Left Column-->
-        <div class="online-user-wrapper">
-            <div class="online-user-header-container">
-                <header>
-                    <h2>Online Users</h2>
-                </header>
-            </div>
-            <div>
-                <!--Online users goes here-->
-                <ul id="users-list">
-
-                </ul>
-            </div>
-        </div>
         <!--Chat Wrapper -->
         <div class="chat-wrapper">
             <div class="simple-chat-title-container">
@@ -115,9 +102,26 @@
             <!-- Input zone -->
             <div id="input_zone">
                 <input id="message" class="vertical-align custom-input" type="text" />
+                <label class="custom-file-upload">
+                    <input id="message_img" type="file" class="vertical-align input-file-hidden" />
+                    <i class="fa fa-cloud-upload"></i>
+                </label>
                 <button id="send_message" class="vertical-align btn" type="button">Send</button>
             </div>
 
+        </div>
+        <!-- Online User Wrapper-->
+        <div class="online-user-wrapper">
+            <div class="online-user-header-container">
+                <header>
+                    <h2>Online Users</h2>
+                </header>
+            </div>
+            <div>
+                <!--Online users goes here-->
+                <ul id="users-list">
+                </ul>
+            </div>
         </div>
     </div>
     <!--jQuery script-->

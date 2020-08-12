@@ -4,38 +4,77 @@ $(function () {
 
     //buttons and inputs
     let message = $("#message");
+    let message_img = null;
     let send_message = $("#send_message");
     let chatroom = $("#chatroom-history");
     let feedback = $("#feedback");
     let usersList = $("#users-list");
     let nickname = $("#nickname-input");
+    $("#message_img")[0].addEventListener('change', getBase64FromInput);
 
+    function getBase64FromInput() {
+        var reader = new FileReader();
+        reader.readAsDataURL(this.files[0]);
+
+        reader.onload = function () {
+            message_img = reader.result //base64encoded string
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+    
     //Emit message
     // If send message btn is clicked
     send_message.click(function(){
-        socket.emit('new_message', {message : message.val()})
+        socket.emit('new_message', {
+            message: message.val(),
+            message_img
+        })
     });
     // Or if the enter key is pressed
     message.keypress( e => {
         let keycode = (e.keyCode ? e.keyCode : e.which);
         if(keycode == '13'){
-            socket.emit('new_message', {message : message.val()})
+            send_message.click()
+            // socket.emit('new_message', {
+            //     message: message.val(),
+            //     message_img
+            // })
         }
     })
 
     //Listen on new_message
     socket.on("new_message", (data) => {
+        $("#message_img")[0].value = null;
+        message_img = null;
         feedback.html('');
         message.val('');
+        let box = document.querySelector('#chatroom');
+        let style = getComputedStyle(box);
+        let max_width = style.width;
+
         //append the new message on the chatroom
-        chatroom.append(`
+        if (data.message_img) {
+            chatroom.append(`
             <div>
                 <div class="box3 sb14">
                     <p style='color:${data.color}' class="chat-text user-nickname">${data.username}</p>
                     <p class="chat-text" style="color: rgba(0,0,0,0.87)">${data.message}</p>
+                    <img max-width="${max_width}" src="${data.message_img}" / >
                 </div>
             </div>
         `)
+        } else {
+            chatroom.append(`
+                <div>
+                    <div class="box3 sb14">
+                        <p style='color:${data.color}' class="chat-text user-nickname">${data.username}</p>
+                        <p class="chat-text" style="color: rgba(0,0,0,0.87)">${data.message}</p>
+                    </div>
+                </div>
+            `)
+        }
         keepTheChatRoomToTheBottom()
     });
 
