@@ -37,10 +37,6 @@ $(function () {
         let keycode = (e.keyCode ? e.keyCode : e.which);
         if(keycode == '13'){
             send_message.click()
-            // socket.emit('new_message', {
-            //     message: message.val(),
-            //     message_img
-            // })
         }
     })
 
