@@ -1,4 +1,6 @@
 const axios = require("axios");
+const NodeCache = require("node-cache");
+const myCache = new NodeCache({ stdTTL: 120, checkperiod: 120 }); // auto delete cache after 2 minutes
 const express = require('express');
 const app = express();
 let randomColor = require('randomcolor');
@@ -13,22 +15,32 @@ app.get('/api/articles',(req,res)=>{
     let url = `https://conduit.productionready.io/api/articles`;
 
     if (!offset) offset = 0;
-    if (!limit) limit = 0;
+    if (!limit) limit = 10;
 
-    axios.get(url, {
-        params: {
-            offset,
-            limit,
-        }
-    })
-    .then(function(response) {
-        // handle success
-        res.json(response.data)
-    })
-    .catch(function(error) {
-        // handle error
-        res.status(500).json(error);
-    });
+    let key = `getArticles_${offset}_${limit}`;
+    cachedArticles = myCache.get(key);
+    if (cachedArticles == undefined) {
+        // handle miss!
+        axios.get(url, {
+            params: {
+                offset,
+                limit,
+            }
+        })
+        .then(function (response) {
+            console.log('cache not found, call endpoint');
+            // handle success
+            myCache.set(key, response.data);
+            res.json(response.data)
+        })
+        .catch(function (error) {
+            // handle error
+            res.status(500).json(error);
+        });
+    } else {
+        console.log("cache found");
+        res.json(cachedArticles);
+    }
 });
 
 //Listen on env port 5000
