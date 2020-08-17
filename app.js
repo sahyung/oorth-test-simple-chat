@@ -8,7 +8,7 @@ const uuid = require('uuid');
 app.use(express.static('public'));
 
 //routes
-app.get('/api/articles', cache(10),(req,res)=>{
+app.get('/api/articles',(req,res)=>{
     let {offset, limit} = req.query;
     let url = `https://conduit.productionready.io/api/articles`;
 
