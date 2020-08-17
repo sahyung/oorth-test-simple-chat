@@ -1,3 +1,4 @@
+const axios = require("axios");
 const express = require('express');
 const app = express();
 let randomColor = require('randomcolor');
@@ -6,8 +7,35 @@ const uuid = require('uuid');
 //middlewares
 app.use(express.static('public'));
 
+//routes
+app.get('/api/articles', cache(10),(req,res)=>{
+    let {offset, limit} = req.query;
+    let url = `https://conduit.productionready.io/api/articles`;
+
+    if (!offset) offset = 0;
+    if (!limit) limit = 0;
+
+    axios.get(url, {
+        params: {
+            offset,
+            limit,
+        }
+    })
+    .then(function(response) {
+        // handle success
+        res.json(response.data)
+    })
+    .catch(function(error) {
+        // handle error
+        res.status(500).json(error);
+    });
+});
+
 //Listen on env port 5000
-server = app.listen( process.env.PORT || 5000);
+const PORT = process.env.PORT || 5000
+server = app.listen(PORT, function () {
+    console.log('listening on ' + PORT);
+});
 
 //socket.io instantiation
 const io = require("socket.io")(server);
@@ -17,7 +45,7 @@ let connnections = [];
 
 //listen on every connection
 io.on('connection', (socket) => {
-    console.log('New user connected');
+    console.log('New Anonymous user connected');
     connnections.push(socket)
     //initialize a random color for the socket
     let color = randomColor();
@@ -30,6 +58,7 @@ io.on('connection', (socket) => {
         let id = uuid.v4(); // create a random id for the user
         socket.id = id;
         socket.username = data.nickname;
+        console.log(`change name to ${socket.username}`);
         users.push({id, username: socket.username, color: socket.color});
         updateUsernames();
     })

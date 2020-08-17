@@ -88,7 +88,7 @@
         <div class="chat-wrapper">
             <div class="simple-chat-title-container">
                 <header>
-                    <h1>{{ env('APP_NAME') }}</h1>
+                    <h1><a href="{{ url('#') }}">{{ env('APP_NAME') }}</a> | <a href="{{ url('/articles') }}">Articles</a></h1>
                 </header>
             </div>
 
